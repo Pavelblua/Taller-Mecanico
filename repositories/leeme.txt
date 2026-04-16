@@ -1,0 +1,1 @@
+# ← AQUÍ va la lógica de acceso a datos (READ)

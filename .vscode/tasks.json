@@ -1,0 +1,15 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Auto Start MCP",
+      "type": "shell",
+      "command": "npm start",
+      "isBackground": true,
+      "options": {
+        "cwd": "C:\\Users\\pavel\\OneDrive\\Documentos\\mcp-servers\\mysql-taller_copilot"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+:root{
+    --primary: #BAC8B1;      /* Fondo claro */
+    --secundary: #6C8480;    /* Color principal */
+    --terciary: #404E3B;     /* Oscuro elegante */
+
+    --dark: #2F3E34;         /* Texto fuerte */
+    --text-light: #6b7280;   /* Texto suave */
+
+    --accent: #6C8480;       /* Botones */
+    --accent-hover: #5A726E;
+
+    --border: #D1D5DB;
+
+    --input-bg: #F4F6F3;
+    --input-focus: #FFFFFF;
+}

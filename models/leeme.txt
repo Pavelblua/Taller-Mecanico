@@ -1,0 +1,1 @@
+# Entidades/DTOs (opcional si usas Repositories)

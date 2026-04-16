@@ -1,0 +1,61 @@
+
+@import "root.css";
+
+.custom-navbar{
+    background: var(--terciary);
+}
+
+.navbar-brand{
+    color: white !important;
+}
+
+.nav-link{
+    color: #e5e7eb !important;
+    margin-right: 10px;
+    transition: 0.3s;
+}
+
+.nav-link:hover{
+    color: white !important;
+}
+
+/* ========================
+   DROPDOWN
+======================== */
+.dropdown-menu{
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.dropdown-item:hover{
+    background: var(--primary);
+}
+
+/* ========================
+   AREA CENTRAL
+======================== */
+.content-area{
+    min-height: 500px;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+/* ========================
+   RESPONSIVE (VERTICAL)
+======================== */
+@media (max-width: 991px){
+
+    .navbar-nav{
+        background: var(--terciary);
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .nav-link{
+        padding: 10px;
+    }
+
+}

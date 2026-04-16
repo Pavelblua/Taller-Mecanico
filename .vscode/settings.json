@@ -1,0 +1,20 @@
+{
+  "github.copilot.chat.experimental.mcp": true,
+
+  "github.copilot.chat.mcpServers": [
+    {
+      "name": "mysql-mcp",
+      "openapi": "./openapi.json"
+    }
+  ],
+
+  "github.copilot.enable": {
+    "*": true,
+    "php": true
+  },
+
+  "editor.inlineSuggest.enabled": true,
+
+  "task.allowAutomaticTasks": "on",
+  "tasks.runOnFolderOpen": "Auto Start MCP"
+}

@@ -1,0 +1,1 @@
+Capa HTTP (reciben request, devuelven JSON)

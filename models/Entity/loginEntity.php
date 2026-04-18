@@ -7,17 +7,20 @@ use models\Entity\statusEntity;
 
 class loginEntity extends statusEntity
 {
-    private int $id_usuario;
-    private string $usuario_login;
-    private string $password_hash;
-    private string $password;
+    private ?int $id_usuario = null;
+    private string $usuario_login = '';
+    private ?string $password_hash = null;
 
-    public function getId_usuario(): int
+    // ← nullable
+    private string $password = '';
+    private string $token;
+
+    public function getId_usuario(): ?int
     {
         return $this->id_usuario;
     }
 
-    public function setId_usuario(int $id_usuario): self
+    public function setId_usuario(?int $id_usuario): self
     {
         $this->id_usuario = $id_usuario;
         return $this;
@@ -34,14 +37,18 @@ class loginEntity extends statusEntity
         return $this;
     }
 
-    public function getPassword_hash(): string
+    public function getPassword_hash(): ?string
     {
-        return $this->password_hash;
+        // ← nullable
+                return $this->password_hash;
     }
 
-    public function setPassword_hash(string $password_hash): self
+    public function setPassword_hash(?string $password_hash): 
+    // ← nullable
+    self
     {
-        $this->password_hash = $password_hash;
+        // ← nullable
+                $this->password_hash = $password_hash;
         return $this;
     }
 
@@ -53,6 +60,17 @@ class loginEntity extends statusEntity
     public function setPassword(string $password): self
     {
         $this->password = $password;
+        return $this;
+    }
+
+    public function getToken(): string
+    {
+        return $this->token;
+    }
+
+    public function setToken(string $token): self
+    {
+        $this->token = $token;
         return $this;
     }
 }

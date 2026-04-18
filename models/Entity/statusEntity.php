@@ -4,11 +4,12 @@ namespace models\Entity;
 
 class statusEntity
 {
-    private int $status;
-    private string $message;
-    private int $message_code;
-    private string $error_message;
-    private int $error_code;
+    private int $status = 0;
+    private string $message = '';
+    private int $message_code = 0;
+    private string $error_message = '';
+    private mixed $data = null;
+    private int $error_code = 0;
 
     public function getStatus(): int
     {
@@ -51,6 +52,17 @@ class statusEntity
     public function setError_message(string $error_message): self
     {
         $this->error_message = $error_message;
+        return $this;
+    }
+
+    public function getData(): mixed
+    {
+        return $this->data;
+    }
+
+    public function setData(mixed $data): self
+    {
+        $this->data = $data;
         return $this;
     }
 

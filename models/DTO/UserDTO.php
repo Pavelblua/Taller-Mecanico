@@ -1,7 +1,7 @@
 <?php
 
 namespace models\dto;
-class UserDTO
+class UserDTO extends ubigeoDTO
 {
     public $id_usuario;
     public $tipo_doc;
@@ -12,8 +12,5 @@ class UserDTO
     public $celular;
     public $direccion;
     public $referencia;
-    public $departamento;
-    public $provincia;
-    public $distrito;
     public $estado;
 }

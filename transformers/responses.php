@@ -11,7 +11,7 @@ class responses
     public function sendResponse(int $httpCode, array $data): void
     {
         header('Content-Type: application/json');
-        header('Access-Control-Allow-Origin: *'); 
+        header('Access-Control-Allow-Origin: *');
         http_response_code($httpCode);
         echo json_encode($data);
         exit;
@@ -56,6 +56,22 @@ class responses
         }
         return $dto;
         //ejemplo: $dto = EntityMapper::mapEntityToDTO($entity, new UserDTO());
+    }
+
+    public static function mapEntityToEntity(object $source, object $target): object
+    {
+        $methods = get_class_methods($source);
+        foreach ($methods as $method) {
+            if (strpos($method, 'get') === 0) {
+                $setter = 'set' . substr($method, 3);
+                if (method_exists($target, $setter)) {
+                    $value = $source->$method();
+                    $target->$setter($value);
+                }
+            }
+        }
+
+        return $target;
     }
 
     public function sendEntity(statusEntity $status, mixed $data = null): void

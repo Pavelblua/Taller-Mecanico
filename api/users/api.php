@@ -1,8 +1,11 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/tallerWeb/autoload.php';
 use api\users\authController;
+use models\Entity\statusEntity;
+use transformers\responses;
 
 $aut = new authController();
+
 
 match (true){
     $method ==='POST' && $uri === '/create' => $aut->createUser(),
@@ -10,8 +13,12 @@ match (true){
 };
 
 function response404() {
-    header('Content-Type: application/json');
-    http_response_code(404);
-    echo json_encode(['status' => false, 'message' => 'Ruta no encontrada']);
-    exit;
+    $sts = new statusEntity();
+    $res = new responses();
+
+    //header('Content-Type: application/json');
+    $sts->setStatus(0);
+    $sts->setError_code(404);
+    $sts->setError_message('Ruta no encontrada');
+    $res->sendEntity($sts);
 }

@@ -23,5 +23,6 @@ class config
             $credentials['DB_PASSWORD'] ='';
             $credentials['DB_NAME'] ='';
         }
+        return $credentials;
     }
 }

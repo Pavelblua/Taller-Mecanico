@@ -8,6 +8,7 @@ use models\dto\UserDTO;
 use models\entity\UserEntity;
 use models\Entity\statusEntity;
 use security\TokenValidator;
+use services\userService;
 
 
 class authController
@@ -25,25 +26,29 @@ private statusEntity $status;
     }
 
 
-    public function createUser(): array
+    public function createUser()
     {
         
         $payload = TokenValidator::validate();
         $idUsuario = $payload['id_usuario'];
+        $serv = new userService();
 
         $usdto = new UserDTO();
-        $usety = new UserEntity();
         $data = $this->getBody();
         $usdto = $this->resps->mapToEntity($data, new UserDTO());
-        $usety = $this->resps->mapDTOToEntity($usdto, new UserEntity());
-        header('Content-Type: application/json');
-        $this->status->setStatus(1);
-        $this->status->setMessage('Usuario creado exitosamente');
-        $this->status->setMessage_code(200);
-        $this->status->setData($usdto);
 
-        $this->resps->sendEntity($this->status,$usdto);
-        exit;
+        $serv->createUser($usdto);
+
+
+
+        // header('Content-Type: application/json');
+        // $this->status->setStatus(1);
+        // $this->status->setMessage('Usuario creado exitosamente');
+        // $this->status->setMessage_code(200);
+        // $this->status->setData($usdto);
+
+        // $this->resps->sendEntity($this->status,$usdto);
+        // exit;
     }
     
 

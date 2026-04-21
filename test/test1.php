@@ -3,13 +3,15 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/tallerWeb/autoload.php';
 
 use services\security\loginService;
 use models\Entity\loginEntity;
+use models\Entity\ubigeoEntity;
+use repositories\ubigeoRep;
 
-$serv = new loginService();
-$login = new loginEntity();
+$ubi = new ubigeoEntity();
+$getUbigeo = new ubigeoRep();
+$ubi->setDepartamento('Lima');
+$ubi->setProvincia('Lima');
+$ubi->setDistrito('Chorrillos');
+$ubi = $getUbigeo->getTotalIdUbigeo($ubi);
 
-$login->setUsuario_login('admin');
-$login->setPassword('admin123');
+print_r($ubi);
 
-$login = $serv->login($login);
-
-print_r($login);

@@ -10,6 +10,7 @@ class loginEntity extends statusEntity
     private ?int $id_usuario = null;
     private string $usuario_login = '';
     private ?string $password_hash = null;
+    private ?int $accesType = null;
 
     // ← nullable
     private string $password = '';
@@ -40,7 +41,7 @@ class loginEntity extends statusEntity
     public function getPassword_hash(): ?string
     {
         // ← nullable
-                return $this->password_hash;
+        return $this->password_hash;
     }
 
     public function setPassword_hash(?string $password_hash): 
@@ -48,7 +49,18 @@ class loginEntity extends statusEntity
     self
     {
         // ← nullable
-                $this->password_hash = $password_hash;
+        $this->password_hash = $password_hash;
+        return $this;
+    }
+
+    public function getAccesType(): ?int
+    {
+        return $this->accesType;
+    }
+
+    public function setAccesType(?int $accesType): self
+    {
+        $this->accesType = $accesType;
         return $this;
     }
 

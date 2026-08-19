@@ -4,6 +4,9 @@ namespace repositories;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/tallerWeb/autoload.php';
 use security\conn\conection;
 use models\entity\UserEntity;
+use models\entity\statusEntity;
+use transformers\responses;
+
 class userRep
 {
     public function createUser(UserEntity $user): UserEntity
@@ -95,6 +98,104 @@ class userRep
         $conect->close();
 
         return $user;
+    }
+
+    public function updateUser(UserEntity $user)
+    {
+        try {
+            $conn = new conection();
+            $conect = $conn->connectDatabase();
+
+            $id_tipo_doc = $user->getId_tipo_doc();
+            $nro_doc = $user->getNro_doc();
+            $nombres = $user->getNombres();
+            $apellidos = $user->getApellidos();
+            $correo = $user->getCorreo();
+            $celular = $user->getCelular();
+            $direccion = $user->getDireccion();
+            $referencia = $user->getReferencia();
+            $id_dep = $user->getId_dep();
+            $id_prov = $user->getId_prov();
+            $id_dist = $user->getId_dist();
+            $id_estado = $user->getId_estado();
+            
+            $query = "CALL actualiza_usuario(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $conect->prepare($query);
+            $stmt->bind_param(
+                "issssssssssi",
+                $id_tipo_doc,
+                $nro_doc,
+                $nombres,
+                $apellidos,
+                $correo,
+                $celular,
+                $direccion,
+                $referencia,
+                $id_dep,
+                $id_prov,
+                $id_dist,
+                $id_estado
+            );
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            $exito = 0;
+            $mensaje = 'Error desconocido al actualizar';
+            
+            if ($result && $row = $result->fetch_assoc()) {
+                $exito = $row['exito'];
+                $mensaje = $row['mensaje'];
+            }
+            
+            $stmt->close();
+            $conect->close();
+            
+            $status = new statusEntity();
+            $status->setStatus($exito)
+                ->setMessage($mensaje)
+                ->setMessage_code($exito == 1 ? 200 : 400);
+
+            $resp = new responses();
+            $resp->sendEntity($status);
+            exit;
+        } catch (\Exception $e) {
+            $status = new statusEntity();
+            $status->setStatus(0)
+                ->setMessage('Error al actualizar el usuario')
+                ->setMessage_code(500)
+                ->setError_message($e->getMessage())
+                ->setError_code($e->getCode());
+
+            $resp = new responses();
+            $resp->sendEntity($status);
+            exit;
+        }
+    }
+    
+    public function listUser($search = null)
+    {
+        $conn = new conection();
+        $conect = $conn->connectDatabase();
+        if ($search === null) {
+            $search = "";
+        }
+        $query = "CALL lista_usuario(?)";
+        $stmt = $conect->prepare($query);
+        $stmt->bind_param("s", $search);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        $users = [];
+        if ($result) {
+            while ($row = $result->fetch_object()) {
+                $users[] = $row;
+            }
+        }
+        
+        $stmt->close();
+        $conect->close();
+        
+        return $users;
     }
     
 }

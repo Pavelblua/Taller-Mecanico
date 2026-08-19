@@ -3,6 +3,7 @@ namespace repositories\security;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/tallerWeb/autoload.php';
 use security\conn\conection;
 use models\Entity\loginEntity;
+use models\entity\sessionUser;
 
 class loginRep
 {
@@ -43,5 +44,34 @@ class loginRep
         $login->setMessage("No se encontró el usuario");
         $login->setMessage_code(404);
         return $login;
+    }
+
+    public function data_acces($search):sessionUser
+    {
+        $ses = new sessionUser();
+        $conn = new conection();
+        $conect = $conn->connectDatabase();
+        
+        $query = "CALL data_acces(?)";
+        $stmt = $conect->prepare($query);
+        $stmt->bind_param("i", $search);
+        $stmt->execute();
+        
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        
+        if ($row) {
+
+            $ses->setNombres($row['nombres']);
+            $ses->setCorreo($row['correo']);
+            $ses->setCelular($row['celular']);
+            $ses->setRol($row['rol']);
+
+        }
+        
+        $stmt->close();
+        $conect->close();
+
+        return $ses;
     }
 }

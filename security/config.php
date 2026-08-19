@@ -15,7 +15,7 @@ class config
         } else if ($ta =="produccion"){
            $credentials['DB_HOST'] = '162.241.62.141';
             $credentials['DB_USER'] ='lacampin_preb';
-            $credentials['DB_PASSWORD'] ='Preb06112427@';
+            $credentials['DB_PASSWORD'] ='Preb06112427';
             $credentials['DB_NAME'] ='lacampin_taller_pro';
         } else {
             $credentials['DB_HOST'] ='';

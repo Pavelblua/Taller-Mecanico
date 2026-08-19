@@ -1,39 +1,28 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<?php
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+namespace plantillas\sections;
 
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-
-
-    <link rel="stylesheet" href="../css/main.css">
-
-    <title>Sistema Taller Pro</title>
-</head>
-
-<body>
-
-<!-- ========================
-     NAVBAR PRINCIPAL
-======================== -->
-<nav class="navbar navbar-expand-lg custom-navbar px-3">
-
-    <!-- LOGO -->
-    <a class="navbar-brand text-white fw-bold" href="#">
+class head
+{
+    private function headLogo()
+    {
+        $html = '<a class="navbar-brand text-white fw-bold" href="#">
         <i class="bi bi-gear"></i> TallerPro
-    </a>
+        </a>';
 
-    <!-- BOTON RESPONSIVE -->
-    <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+        return $html;
+    }
+
+   private function headMenuButton(){
+        $html ='<button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
         <i class="bi bi-list"></i>
-    </button>
+    </button>';
 
-    <!-- MENU -->
+    return $html;
+    }
+
+    private function headMenu(){
+        $html = '<!-- MENU -->
     <div class="collapse navbar-collapse" id="menu">
         <ul class="navbar-nav ms-auto">
 
@@ -104,24 +93,18 @@
             </li>
 
         </ul>
-    </div>
-</nav>
+    </div>';
 
-<!-- ========================
-     CONTENIDO DINAMICO
-======================== -->
-<div class="container-fluid mt-4">
-    <div id="contenido-dinamico" class="content-area">
-        <!-- Aquí se cargarán formularios dinámicamente -->
-    </div>
-</div>
+    return $html;
+    }
 
+    public function headConstructor(){
+        $html = '<nav class="navbar navbar-expand-lg custom-navbar px-3">';
+        $html .= $this->headLogo();
+        $html .= $this->headMenuButton();
+        $html .= $this->headMenu();
+        $html .= '</nav>';
 
-
-<!-- ========================
-     JS
-======================== -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-
-</body>
-</html>
+        return $html;
+    }
+}

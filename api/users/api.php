@@ -6,9 +6,21 @@ use transformers\responses;
 
 $aut = new authController();
 
+$updateMatch = [];
+$isUpdateRoute = preg_match(
+    '#^/update/([^/]+)/([^/]+)$#',
+    $uri,
+    $updateMatch
+);
 
 match (true){
     $method ==='POST' && $uri === '/create' => $aut->createUser(),
+    $method ==='PATCH' && $isUpdateRoute === 1
+        => $aut->updateUser($updateMatch[1], $updateMatch[2]),
+     $method === 'GET' && $uri === '/list'
+        => $aut->listUser($_GET['search'] ?? null),
+     $method === 'POST' && $uri === '/uploadimage'
+        => $aut->uploadImage(),
     default => response404()
 };
 

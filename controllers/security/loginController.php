@@ -1,11 +1,15 @@
 <?php
+namespace controllers\security;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/tallerWeb/autoload.php';
 
 use services\security\loginService;
 use transformers\responses;
 use models\Entity\loginEntity;
-use security\JwtHelper; 
+use security\JwtHelper;
+use models\entity\sessionUser;
+use repositories\security\loginRep;
+use transformers\tools;
 
 class loginController
 {
@@ -36,28 +40,43 @@ class loginController
 
         if (empty($data['user']) || empty($data['password'])) {
             $res->sendResponse(400, [
-                'status'  => false,
+                'status' => false,
                 'message' => 'Los campos user y password son requeridos'
             ]);
             return;
         } else {
             $log->setUsuario_login($data['user']);
             $log->setPassword($data['password']);
+            $log->setAccesType($data['accestype']);
+
         }
 
         $log = $this->loginService->login($log);
 
         if ($log->getMessage_code() === 200) {
 
+            if ($log->getAccesType() === 1) {
+                $ses = new sessionUser();
+                $loginr = new loginRep();
+                $tools = new tools();
+                $ses = $loginr->data_acces($log->getId_usuario());
+                $ses = $log->getId_usuario();
+                $ses = $loginr->data_acces($ses);
+                $ses->setHash($log->getToken());
+                $ses->setUsuario($log->getUsuario_login());
+                $ses->setAutenticado(true);
+                $tools->createSession($ses);
+            }
             $res->sendResponse(200, [
-                'status'     => true,
-                'message'    => 'Login exitoso',
+                'status' => true,
+                'message' => 'Login exitoso',
                 'id_usuario' => $log->getId_usuario(),
-                'token'      => $log->getToken()
+                'token' => $log->getToken()
             ]);
+
         } else {
             $res->sendResponse(401, [
-                'status'  => false,
+                'status' => false,
                 'message' => 'Credenciales incorrectas'
             ]);
         }

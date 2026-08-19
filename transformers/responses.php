@@ -1,8 +1,5 @@
 <?php
-
 namespace transformers;
-
-require_once $_SERVER['DOCUMENT_ROOT'] . '/tallerWeb/autoload.php';
 
 use models\entity\statusEntity;
 

@@ -1,119 +1,15 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<?php
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+namespace plantillas\user;
+require_once $_SERVER['DOCUMENT_ROOT'] . '/tallerWeb/autoload.php';
 
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+use controllers\comboCont;
+class forms
+{
+    public function newUser(){
+        $combo = new comboCont();
 
-
-    <link rel="stylesheet" href="../css/main.css">
-
-    <title>Sistema Taller Pro</title>
-</head>
-
-<body>
-
-<!-- ========================
-     NAVBAR PRINCIPAL
-======================== -->
-<nav class="navbar navbar-expand-lg custom-navbar px-3">
-
-    <!-- LOGO -->
-    <a class="navbar-brand text-white fw-bold" href="#">
-        <i class="bi bi-gear"></i> TallerPro
-    </a>
-
-    <!-- BOTON RESPONSIVE -->
-    <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
-        <i class="bi bi-list"></i>
-    </button>
-
-    <!-- MENU -->
-    <div class="collapse navbar-collapse" id="menu">
-        <ul class="navbar-nav ms-auto">
-
-            <!-- DASHBOARD -->
-            <li class="nav-item">
-                <a class="nav-link" href="#"><i class="bi bi-speedometer2"></i> Dashboard</a>
-            </li>
-
-            <!-- USUARIOS -->
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
-                    <i class="bi bi-people"></i> Usuarios
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Gestión de Usuarios</a></li>
-                    <li><a class="dropdown-item" href="#">Roles</a></li>
-                    <li><a class="dropdown-item" href="#">Permisos</a></li>
-                </ul>
-            </li>
-
-            <!-- CLIENTES -->
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
-                    <i class="bi bi-person-badge"></i> Clientes
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Lista de Clientes</a></li>
-                    <li><a class="dropdown-item" href="#">Registrar Cliente</a></li>
-                </ul>
-            </li>
-
-            <!-- AUTOMOVILES -->
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
-                    <i class="bi bi-car-front"></i> Automóviles
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Lista de Autos</a></li>
-                    <li><a class="dropdown-item" href="#">Registrar Auto</a></li>
-                </ul>
-            </li>
-
-            <!-- DIAGNOSTICO -->
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
-                    <i class="bi bi-tools"></i> Diagnóstico
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Nuevo Diagnóstico</a></li>
-                    <li><a class="dropdown-item" href="#">Historial</a></li>
-                </ul>
-            </li>
-
-            <!-- COTIZACION -->
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
-                    <i class="bi bi-cash-stack"></i> Cotización
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Nueva Cotización</a></li>
-                    <li><a class="dropdown-item" href="#">Historial</a></li>
-                </ul>
-            </li>
-
-            <!-- PAGOS -->
-            <li class="nav-item">
-                <a class="nav-link" href="#"><i class="bi bi-credit-card"></i> Pagos</a>
-            </li>
-
-        </ul>
-    </div>
-</nav>
-
-<!-- ========================
-     CONTENIDO DINAMICO
-======================== -->
-<div class="container-fluid mt-4">
-    <div id="contenido-dinamico" class="content-area">
-
-        <div class="card p-4 ">
+        $html ='<div class="card p-4 ">
 
             <div class="mb-4 text-success fw-bold">
                 <h2 class="mb-1">
@@ -140,7 +36,7 @@
                                         name="id_tipo_doc"
                                         required>
 
-                                    <option value="">Seleccione</option>
+                                    '.$combo->cbotipoDocumento('').'
 
                                 </select>
                             </div>
@@ -258,11 +154,9 @@
                                 <select class="form-select"
                                         id="id_dep"
                                         name="id_dep"
-                                        required>
+                                        required onchange="cargaProvincia(this.value)">
 
-                                    <option value="">
-                                        Seleccione departamento
-                                    </option>
+                                    '.$combo->cboDepartamento('').'
 
                                 </select>
                             </div>
@@ -277,7 +171,7 @@
                                 <select class="form-select"
                                         id="id_prov"
                                         name="id_prov"
-                                        required>
+                                        required onchange="cargaDistrito(this.value)">
 
                                     <option value="">
                                         Seleccione provincia
@@ -352,22 +246,13 @@
                         Limpiar
                     </button>
 
-                    <button type="submit" class="btn btn-primary">
+                    <button type="button" class="btn btn-primary" onclick="insertNewUser()">
                         <i class="bi bi-floppy2-fill"></i>
                         Guardar usuario
                     </button>
                 </div>
             </form>
-        </div>
-    </div>
-</div>
-
-
-
-<!-- ========================
-     JS
-======================== -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-
-</body>
-</html>
+        </div>';
+        return $html;
+    }
+}

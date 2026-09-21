@@ -2,7 +2,6 @@
 
 namespace services;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/tallerWeb/autoload.php';
-use repositories\security\loginRep;
 use models\entity\UserEntity;
 use models\dto\UserDTO;
 use transformers\responses;
@@ -65,6 +64,33 @@ class userService
             $resp = new responses();
             $resp->sendEntity($status);
         }
+    }
+
+    public function createUserFront(UserEntity $userEntity){
+        try{
+        $user_val = new UserEntity();
+        $rep = new userRep();
+        $status = new statusEntity();
+        $user_val = $rep->detailUser($userEntity);
+        if($user_val->getId_usuario()!==null){
+            $status->setStatus(0)
+                    ->setMessage('El usuario ya existe')
+                    ->setMessage_code(409);            
+        } else {
+            $userEntity = $rep->createUser($userEntity);
+            $status->setStatus(1)
+                ->setMessage('El usuario fue creado')
+                ->setMessage_code(201);
+        }
+        } catch (\Exception $e) {
+            
+            $status->setStatus(0)
+                ->setMessage('Error al crear el usuario')
+                ->setMessage_code(500)
+                ->setError_message($e->getMessage())
+                ->setError_code($e->getCode());
+        }
+        return $status;
     }
 
     public function updateUser(UserDTO $userDTO){

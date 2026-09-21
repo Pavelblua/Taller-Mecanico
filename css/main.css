@@ -127,6 +127,24 @@ body {
 
 
 /* =========================================================
+   SUB MENUS
+========================================================= */
+
+.dropdown-submenu {
+  position: relative;
+}
+
+.dropdown-submenu > .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -0.4rem;
+}
+
+.dropdown-submenu > .dropdown-menu.show {
+  display: block;
+}
+
+/* =========================================================
    RESPONSIVE - PANTALLAS PEQUEÑAS
 ========================================================= */
 
@@ -139,5 +157,10 @@ body {
 
         font-size: 13px;
     }
+
+    .dropdown-submenu > .dropdown-menu {
+    position: static;
+    margin-left: 1rem;
+  }
 
 }

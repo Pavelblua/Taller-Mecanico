@@ -33,11 +33,23 @@ class head
 
             <!-- USUARIOS -->
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="outside"  href="#">
                     <i class="bi bi-people"></i> Usuarios
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Gestión de Usuarios</a></li>
+                    <li class="dropdown-submenu">
+                        <a class="dropdown-item dropdown-toggle"  href="#">
+                            Gestión de Usuarios
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="newUser()">Nuevo Usuario</a></li>
+                            <li><a class="dropdown-item" href="#">Editar Usuario</a></li>
+                            <li><a class="dropdown-item" href="#">Baja de Usuario</a></li>
+                            <li><a class="dropdown-item" href="#">Lista de Usuarios Cliente</a></li>
+                        </ul>
+                    </li>
+                    
                     <li><a class="dropdown-item" href="#">Roles</a></li>
                     <li><a class="dropdown-item" href="#">Permisos</a></li>
                 </ul>

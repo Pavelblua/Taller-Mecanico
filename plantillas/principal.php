@@ -8,6 +8,12 @@ use plantillas\sections\footer;
 
 class principal
 {
+    private function js_generic(){
+        $js = '<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>';
+        $js .= '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>';
+        $js .= '<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>';
+        return $js;
+    }
     public function login_body()
     {
         $html = '<div class="login-card">
@@ -61,7 +67,8 @@ class principal
 
     public function login_js()
     {
-        $js = '<script src="js/tools.js"></script>';
+        $js = $this->js_generic();
+        $js .= '<script src="js/tools.js"></script>';
         $js .= '<script src="js/modal/status.js"></script>';
         $js .= '<script src="js/login/login.js"></script>';
         $js .= '<script src="js/login/getLogin.js"></script>';
@@ -80,8 +87,7 @@ class principal
         $html = $head->headConstructor();
         $html .= $body->bodyConstructor();
         $html .= $footer->footerConstructor($version, $usuario);
-        $html .= '<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>';
-
+        
         return $html;
     }
 
@@ -89,6 +95,16 @@ class principal
     {
         $css = '<link rel="stylesheet" href="./css/main.css">';
         return $css;
+    }
+
+    public function index_js()
+    {
+        $js = $this->js_generic();
+        $js .= '<script src="js/submenu.js"></script>';
+        $js .= '<script src="js/tools.js"></script>';
+        $js .= '<script src="js/optionsMenu.js"></script>';
+        $js .= '<script src="js/modal/status.js"></script>';
+        return $js;
     }
 
     public function add_div()

@@ -6,7 +6,6 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/tallerWeb/autoload.php';
 
 use transformers\responses;
 use models\dto\UserDTO;
-use models\entity\UserEntity;
 use models\Entity\statusEntity;
 use security\TokenValidator;
 use services\userService;

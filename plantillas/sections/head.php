@@ -46,7 +46,7 @@ class head
                             <li><a class="dropdown-item" href="#" onclick="newUser()">Nuevo Usuario</a></li>
                             <li><a class="dropdown-item" href="#">Editar Usuario</a></li>
                             <li><a class="dropdown-item" href="#">Baja de Usuario</a></li>
-                            <li><a class="dropdown-item" href="#">Lista de Usuarios Cliente</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="listUser()">Lista de Usuarios Cliente</a></li>
                         </ul>
                     </li>
                     

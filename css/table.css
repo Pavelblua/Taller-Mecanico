@@ -1,0 +1,33 @@
+@import "root.css";
+
+.page-header {
+    background: var(--brand-dark);
+    color: white;
+}
+
+.content-card {
+    border: 0;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(22, 50, 79, .09);
+}
+
+.table thead th {
+    background: var(--primary);
+    border-bottom: 2px solid var(--line);
+    color: var(--input-bg);
+    white-space: nowrap;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table tbody tr{
+    text-align: center;
+    color: var(--terciary);
+}
+
+@media (max-width: 767.98px) {
+    .table-responsive {
+        margin-right: -1rem;
+        margin-left: -1rem;
+    }
+}

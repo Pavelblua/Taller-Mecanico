@@ -6,7 +6,6 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/tallerWeb/autoload.php';
 use services\security\loginService;
 use transformers\responses;
 use models\Entity\loginEntity;
-use security\JwtHelper;
 use models\entity\sessionUser;
 use repositories\security\loginRep;
 use transformers\tools;

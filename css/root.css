@@ -13,4 +13,11 @@
 
     --input-bg: #F4F6F3;
     --input-focus: #FFFFFF;
+
+    
+    /* grid */
+    --brand-dark: #16324f;
+    --brand: #1f6f8b;
+    --page: #f2f6f8;
+    --line: #dce5ea;
 }

@@ -23,3 +23,17 @@ function cargaModalStatus(status, title, message){
             })
         });
 }
+
+
+function getModalDetail() {
+    const modalElement = document.getElementById('modalDetail');
+    return bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+}
+
+function abrirModalDetail() {
+    getModalDetail().show();
+}
+
+function cerrarModalDetail() {
+    getModalDetail().hide();
+}

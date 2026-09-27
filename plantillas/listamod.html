@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de clientes - Taller Pro</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --brand-dark: #16324f;
+            --brand: #1f6f8b;
+            --page: #f2f6f8;
+            --line: #dce5ea;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--page);
+            color: #243746;
+        }
+
+        .page-header {
+            background: var(--brand-dark);
+            color: white;
+        }
+
+        .content-card {
+            border: 0;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(22, 50, 79, .09);
+        }
+
+        .table thead th {
+            background: #eef4f6;
+            border-bottom: 2px solid var(--line);
+            color: var(--brand-dark);
+            white-space: nowrap;
+        }
+
+        .sort-button {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            color: inherit;
+            font: inherit;
+            font-weight: 600;
+        }
+
+        .sort-button:hover,
+        .sort-button:focus-visible {
+            color: var(--brand);
+        }
+
+        .sort-icon {
+            color: #8ca1ac;
+        }
+
+        .sort-button[aria-sort="ascending"] .sort-icon::before {
+            content: "\\f128";
+        }
+
+        .sort-button[aria-sort="descending"] .sort-icon::before {
+            content: "\\f12a";
+        }
+
+        .status-badge {
+            min-width: 78px;
+        }
+
+        .pagination .page-link {
+            color: var(--brand-dark);
+        }
+
+        .pagination .active .page-link {
+            background: var(--brand);
+            border-color: var(--brand);
+            color: white;
+        }
+
+        @media (max-width: 767.98px) {
+            .table-responsive {
+                margin-right: -1rem;
+                margin-left: -1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="page-header py-4">
+        <div class="container-fluid px-4 px-lg-5">
+            <div class="d-flex align-items-center gap-3">
+                <i class="bi bi-people-fill fs-2" aria-hidden="true"></i>
+                <div>
+                    <h2 class="h3 mb-1">Lista de Usuarios</h2>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container-fluid px-4 px-lg-5 py-4">
+        <section class="card content-card">
+            <div class="card-body p-3 p-lg-4">
+                <div class="table-responsive">
+                    
+                </div>
+
+                <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3 pt-3">
+                    <span id="pageSummary" class="small text-secondary"></span>
+                    <nav aria-label="Paginación de clientes">
+                        <ul id="pagination" class="pagination pagination-sm mb-0"></ul>
+                    </nav>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const rowsPerPage = 20;
+        let currentPage = 1;
+        let sortColumn = 'id_cliente';
+        let sortDirection = 'ascending';
+
+        // Sustituir este arreglo por la respuesta de la API de clientes.
+        const clients = [
+            { id_cliente: 1, nro_doc: '70451231', nombres: 'Ana', apellidos: 'Torres Vargas', correo: 'ana.torres@example.com', celular: '987654321', estado: 'Activo' },
+            { id_cliente: 2, nro_doc: '70451232', nombres: 'Bruno', apellidos: 'Mendoza Ruiz', correo: 'bruno.mendoza@example.com', celular: '987654322', estado: 'Activo' },
+            { id_cliente: 3, nro_doc: '70451233', nombres: 'Carla', apellidos: 'Soto Paredes', correo: 'carla.soto@example.com', celular: '987654323', estado: 'Inactivo' },
+            { id_cliente: 4, nro_doc: '70451234', nombres: 'Diego', apellidos: 'Ramos León', correo: 'diego.ramos@example.com', celular: '987654324', estado: 'Activo' },
+            { id_cliente: 5, nro_doc: '70451235', nombres: 'Elena', apellidos: 'Castillo Paz', correo: 'elena.castillo@example.com', celular: '987654325', estado: 'Activo' },
+            { id_cliente: 6, nro_doc: '70451236', nombres: 'Fabio', apellidos: 'Herrera Díaz', correo: 'fabio.herrera@example.com', celular: '987654326', estado: 'Pendiente' },
+            { id_cliente: 7, nro_doc: '70451237', nombres: 'Gabriela', apellidos: 'Vega Flores', correo: 'gabriela.vega@example.com', celular: '987654327', estado: 'Activo' },
+            { id_cliente: 8, nro_doc: '70451238', nombres: 'Hugo', apellidos: 'Navarro Gil', correo: 'hugo.navarro@example.com', celular: '987654328', estado: 'Activo' },
+            { id_cliente: 9, nro_doc: '70451239', nombres: 'Irene', apellidos: 'Ponce Salas', correo: 'irene.ponce@example.com', celular: '987654329', estado: 'Inactivo' },
+            { id_cliente: 10, nro_doc: '70451240', nombres: 'Jorge', apellidos: 'Campos Ríos', correo: 'jorge.campos@example.com', celular: '987654330', estado: 'Activo' },
+            { id_cliente: 11, nro_doc: '70451241', nombres: 'Karen', apellidos: 'Molina Cruz', correo: 'karen.molina@example.com', celular: '987654331', estado: 'Activo' },
+            { id_cliente: 12, nro_doc: '70451242', nombres: 'Luis', apellidos: 'Fuentes Vera', correo: 'luis.fuentes@example.com', celular: '987654332', estado: 'Pendiente' },
+            { id_cliente: 13, nro_doc: '70451243', nombres: 'María', apellidos: 'Salazar Núñez', correo: 'maria.salazar@example.com', celular: '987654333', estado: 'Activo' },
+            { id_cliente: 14, nro_doc: '70451244', nombres: 'Nicolás', apellidos: 'Peña Soto', correo: 'nicolas.pena@example.com', celular: '987654334', estado: 'Activo' },
+            { id_cliente: 15, nro_doc: '70451245', nombres: 'Olga', apellidos: 'Reyes Luna', correo: 'olga.reyes@example.com', celular: '987654335', estado: 'Inactivo' },
+            { id_cliente: 16, nro_doc: '70451246', nombres: 'Pablo', apellidos: 'Quispe Rojas', correo: 'pablo.quispe@example.com', celular: '987654336', estado: 'Activo' },
+            { id_cliente: 17, nro_doc: '70451247', nombres: 'Rosa', apellidos: 'Cárdenas Silva', correo: 'rosa.cardenas@example.com', celular: '987654337', estado: 'Activo' },
+            { id_cliente: 18, nro_doc: '70451248', nombres: 'Sergio', apellidos: 'Valdez Peña', correo: 'sergio.valdez@example.com', celular: '987654338', estado: 'Pendiente' },
+            { id_cliente: 19, nro_doc: '70451249', nombres: 'Teresa', apellidos: 'Gómez Arias', correo: 'teresa.gomez@example.com', celular: '987654339', estado: 'Activo' },
+            { id_cliente: 20, nro_doc: '70451250', nombres: 'Ulises', apellidos: 'Medina Ortiz', correo: 'ulises.medina@example.com', celular: '987654340', estado: 'Activo' },
+            { id_cliente: 21, nro_doc: '70451251', nombres: 'Valeria', apellidos: 'Paredes Soto', correo: 'valeria.paredes@example.com', celular: '987654341', estado: 'Activo' },
+            { id_cliente: 22, nro_doc: '70451252', nombres: 'Walter', apellidos: 'Cáceres Rivas', correo: 'walter.caceres@example.com', celular: '987654342', estado: 'Inactivo' },
+            { id_cliente: 23, nro_doc: '70451253', nombres: 'Ximena', apellidos: 'Lazo Medina', correo: 'ximena.lazo@example.com', celular: '987654343', estado: 'Activo' },
+            { id_cliente: 24, nro_doc: '70451254', nombres: 'Yolanda', apellidos: 'Vargas León', correo: 'yolanda.vargas@example.com', celular: '987654344', estado: 'Activo' },
+            { id_cliente: 25, nro_doc: '70451255', nombres: 'Zacarías', apellidos: 'Rojas Campos', correo: 'zacarias.rojas@example.com', celular: '987654345', estado: 'Pendiente' }
+        ];
+
+        const tableBody = document.getElementById('clientsTableBody');
+        const pagination = document.getElementById('pagination');
+        const searchInput = document.getElementById('searchInput');
+        const resultSummary = document.getElementById('resultSummary');
+        const pageSummary = document.getElementById('pageSummary');
+
+        function getFilteredClients() {
+            const searchTerm = searchInput.value.trim().toLocaleLowerCase();
+
+            if (!searchTerm) return [...clients];
+
+            return clients.filter(client => Object.values(client).some(value =>
+                String(value).toLocaleLowerCase().includes(searchTerm)
+            ));
+        }
+
+        function getSortedClients(clientList) {
+            return clientList.sort((firstClient, secondClient) => {
+                const firstValue = firstClient[sortColumn];
+                const secondValue = secondClient[sortColumn];
+                const comparison = typeof firstValue === 'number'
+                    ? firstValue - secondValue
+                    : String(firstValue).localeCompare(String(secondValue), 'es', { sensitivity: 'base' });
+
+                return sortDirection === 'ascending' ? comparison : -comparison;
+            });
+        }
+
+        function renderTable() {
+            const sortedClients = getSortedClients(getFilteredClients());
+            const totalPages = Math.max(1, Math.ceil(sortedClients.length / rowsPerPage));
+            currentPage = Math.min(currentPage, totalPages);
+            const firstRow = (currentPage - 1) * rowsPerPage;
+            const pageClients = sortedClients.slice(firstRow, firstRow + rowsPerPage);
+
+            tableBody.innerHTML = pageClients.length
+                ? pageClients.map(client => `
+                    <tr>
+                        <td>${client.id_cliente}</td>
+                        <td>${client.nro_doc}</td>
+                        <td>${client.nombres}</td>
+                        <td>${client.apellidos}</td>
+                        <td>${client.correo}</td>
+                        <td>${client.celular}</td>
+                        <td><span class="badge rounded-pill status-badge ${getStatusClass(client.estado)}">${client.estado}</span></td>
+                    </tr>
+                `).join('')
+                : '<tr><td class="text-center text-secondary py-4" colspan="7">No se encontraron clientes.</td></tr>';
+
+            resultSummary.textContent = `${sortedClients.length} cliente${sortedClients.length === 1 ? '' : 's'}`;
+            pageSummary.textContent = sortedClients.length
+                ? `Mostrando ${firstRow + 1}-${Math.min(firstRow + rowsPerPage, sortedClients.length)} de ${sortedClients.length}`
+                : 'Sin resultados';
+            renderPagination(totalPages);
+        }
+
+        function getStatusClass(status) {
+            return status === 'Activo' ? 'text-bg-success' : status === 'Pendiente' ? 'text-bg-warning' : 'text-bg-secondary';
+        }
+
+        function renderPagination(totalPages) {
+            pagination.innerHTML = '';
+            if (totalPages <= 1) return;
+
+            addPageButton('Anterior', currentPage - 1, currentPage === 1, 'bi bi-chevron-left');
+            for (let pageNumber = 1; pageNumber <= totalPages; pageNumber += 1) {
+                addPageButton(String(pageNumber), pageNumber, false, '', pageNumber === currentPage);
+            }
+            addPageButton('Siguiente', currentPage + 1, currentPage === totalPages, 'bi bi-chevron-right');
+        }
+
+        function addPageButton(label, pageNumber, disabled, iconClass, active = false) {
+            const listItem = document.createElement('li');
+            listItem.className = `page-item${active ? ' active' : ''}${disabled ? ' disabled' : ''}`;
+            const button = document.createElement('button');
+            button.className = 'page-link';
+            button.type = 'button';
+            button.disabled = disabled;
+            button.setAttribute('aria-label', label);
+            button.innerHTML = iconClass ? `<i class="${iconClass}" aria-hidden="true"></i>` : label;
+            button.addEventListener('click', () => {
+                currentPage = pageNumber;
+                renderTable();
+            });
+            listItem.appendChild(button);
+            pagination.appendChild(listItem);
+        }
+
+        document.querySelectorAll('.sort-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const selectedColumn = button.dataset.sort;
+                if (sortColumn === selectedColumn) {
+                    sortDirection = sortDirection === 'ascending' ? 'descending' : 'ascending';
+                } else {
+                    sortColumn = selectedColumn;
+                    sortDirection = 'ascending';
+                }
+
+                document.querySelectorAll('.sort-button').forEach(sortButton => {
+                    sortButton.setAttribute('aria-sort', sortButton === button ? sortDirection : 'none');
+                });
+                currentPage = 1;
+                renderTable();
+            });
+        });
+
+        searchInput.addEventListener('input', () => {
+            currentPage = 1;
+            renderTable();
+        });
+
+        document.querySelector('[data-sort="id_cliente"]').setAttribute('aria-sort', 'ascending');
+        renderTable();
+    </script>
+</body>
+</html>

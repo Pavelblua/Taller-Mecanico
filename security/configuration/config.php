@@ -25,4 +25,10 @@ class config
         }
         return $credentials;
     }
+
+    public function rootImageUser()
+    {
+        $root[] = ['../../imageUser/', 'imagen', './imageUser/'];
+        return $root;
+    }
 }

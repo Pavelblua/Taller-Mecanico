@@ -94,6 +94,7 @@ class principal
     public function index_css()
     {
         $css = '<link rel="stylesheet" href="./css/main.css">';
+        $css .= '<link rel="stylesheet" href="./css/table.css">';
         return $css;
     }
 

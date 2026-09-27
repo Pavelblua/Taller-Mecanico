@@ -76,6 +76,7 @@ class userRep
         
         if ($row) {
             $user->setId_usuario($row['id_usuario']);
+            $user->setTipo_doc($row['tipo_doc']);
             $user->setId_tipo_doc($row['id_tipo_doc']);
             $user->setNro_doc($row['nro_doc']);
             $user->setNombres($row['nombres']);

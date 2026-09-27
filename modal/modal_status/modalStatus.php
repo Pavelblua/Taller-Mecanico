@@ -4,6 +4,7 @@ namespace modal\modal_status;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/tallerWeb/autoload.php';
 
 use models\Entity\modalStatusEntity;
+use models\Entity\modalDetailEntity;
 
 class modalStatus
 {
@@ -27,6 +28,28 @@ class modalStatus
                 </div>
                 </div>
                 <script>abrirModalStatus();</script>';
+        return $html;
+    }
+
+    public function detail(modalDetailEntity $detailEntity){
+        $html ='<div class="modal fade modal-xl" id="modalDetail" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header '.$detailEntity->getColortitle().'">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel"><i class="bi '.$detailEntity->getIconTitle().'"></i> '.$detailEntity->getTitle().'</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        '.$detailEntity->getBody().'
+                    </div>
+                     <div class="modal-footer">
+                        '.$detailEntity->getButtons().'
+                    </div>
+                    </div>
+                </div>
+                </div>
+                <script>abrirModalDetail();</script>';
+
         return $html;
     }
 }

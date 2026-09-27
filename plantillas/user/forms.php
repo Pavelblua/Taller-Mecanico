@@ -4,6 +4,7 @@ namespace plantillas\user;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/tallerWeb/autoload.php';
 
 use controllers\comboCont;
+use models\entity\UserEntity;
 class forms
 {
     public function newUser(){
@@ -252,6 +253,228 @@ class forms
                     </button>
                 </div>
             </form>
+        </div>';
+        return $html;
+    }
+
+    public function listUser(){
+        $html = '<div class="card p-4 ">
+        <div class="mb-4 text-success fw-bold row g-4">
+            <div class="col-md-8">
+                <h2 class="mb-1">
+                    <i class="bi bi-people-fill fs-2"></i>
+                      Lista de Usuarios
+                </h2>
+            </div>
+            <div class="col-md-4">
+            
+            <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1"><i class="bi bi-binoculars-fill"></i></span>
+                <input type="text"
+                   class="form-control"
+                   id="search"
+                   name="search"
+                   maxlength="100"
+                   placeholder="Ingrese nombre, apellido o documento" 
+                   aria-describedby="basic-addon1"
+                   onkeyup="searchUser(this.value)">
+                </div>
+            
+            </div>
+        </div>        
+        <div class="table-responsive" id="table">
+            
+        </div>
+        </div>';
+
+        return $html;
+    }
+
+public function detailUser(UserEntity $user, $image){
+        $combo = new comboCont();
+
+        $html ='<div class="card p-4 ">
+
+                <div class="row g-4 text-success fw-bold">
+                    <div class="col-md-9">
+
+                        <div class="row g-3">
+
+                            <div class="col-md-4">
+                                <label for="id_tipo_doc" class="form-label">
+                                    <i class="bi bi-postcard"></i>
+                                     Tipo de documento
+                                </label>
+
+                                <input type="text" class="form-control" disabled
+                                        id="id_tipo_doc"
+                                        name="id_tipo_doc"
+                                        value="'.$user->getTipo_doc().'">
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <label for="nro_doc" class="form-label">
+                                    <i class="bi bi-postcard"></i>
+                                    Nro. documento
+                                </label>
+
+                                <input type="text"
+                                       class="form-control" disabled
+                                       id="nro_doc"
+                                       name="nro_doc"
+                                       maxlength="20"
+                                       value="'.$user->getNro_doc().'">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="nombres" class="form-label">
+                                    <i class="bi bi-person-vcard-fill"></i>
+                                    Nombres
+                                </label>
+
+                                <input type="text"
+                                       class="form-control" disabled
+                                       id="nombres"
+                                       name="nombres"
+                                       maxlength="100"
+                                       value="'.$user->getNombres().'">
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <label for="apellidos" class="form-label">
+                                    <i class="bi bi-person-vcard-fill"></i>
+                                    Apellidos
+                                </label>
+
+                                <input type="text"
+                                       class="form-control" disabled
+                                       id="apellidos"
+                                       name="apellidos"
+                                       maxlength="100"
+                                       value="'.$user->getApellidos().'">
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <label for="correo" class="form-label">
+                                    <i class="bi bi-envelope-at-fill"></i>
+                                    Correo
+                                </label>
+
+                                <input type="email"
+                                       class="form-control" disabled
+                                       id="correo"
+                                       name="correo"
+                                       maxlength="100"
+                                       value="'.$user->getCorreo().'">
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <label for="celular" class="form-label">
+                                    <i class="bi bi-phone-vibrate-fill"></i>
+                                    Celular
+                                </label>
+
+                                <input type="text" disabled
+                                       class="form-control"
+                                       id="celular"
+                                       name="celular"
+                                       maxlength="20"
+                                       value="'.$user->getCelular().'">
+                            </div>
+
+
+                            <div class="col-md-12">
+                                <label for="direccion" class="form-label">
+                                    <i class="bi bi-geo-alt-fill"></i>
+                                    Dirección
+                                </label>
+
+                                <input type="text"
+                                       class="form-control" disabled
+                                       id="direccion"
+                                       name="direccion"
+                                       maxlength="200"
+                                       value="'.$user->getDireccion().'">
+                            </div>
+
+
+                            <div class="col-md-12">
+                                <label for="referencia" class="form-label">
+                                    <i class="bi bi-compass-fill"></i>
+                                    Referencia
+                                </label>
+
+                                <input type="text"
+                                       class="form-control" disabled
+                                       id="referencia"
+                                       name="referencia"
+                                       maxlength="200" value="'.$user->getReferencia().'">
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <label for="id_dep" class="form-label">
+                                    <i class="bi bi-geo-fill"></i>
+                                    Departamento
+                                </label>
+
+                                <input type="text" class="form-control" disabled
+                                        id="id_dep"
+                                        name="id_dep"
+                                        value="'.$user->getDepartamento().'">
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <label for="id_prov" class="form-label">
+                                    <i class="bi bi-geo-fill"></i>
+                                    Provincia
+                                </label>
+
+                                <input type="text" class="form-control" disabled
+                                        id="id_prov"
+                                        name="id_prov"
+                                        value="'.$user->getProvincia().'">
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <label for="id_dist" class="form-label">
+                                    <i class="bi bi-geo-fill"></i>
+                                    Distrito
+                                </label>
+
+                                <input class="form-control" type="text" disabled
+                                        id="id_dist"
+                                        name="id_dist"
+                                        value="'.$user->getDistrito().'">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <div class="d-flex flex-column h-100">
+                            <label for="imagen_usuario"
+                                   id="previewImagen"
+                                   class="border rounded d-flex align-items-center justify-content-center flex-grow-1 overflow-hidden"
+                                   >
+                                <img id="imagenPreview"
+                                     src="'.$image.'"
+                                     alt="Vista previa"
+                                     class="img-fluid"
+                                     style="width: 100%; height: 100%; object-fit: contain;">
+
+                            </label>
+                        </div>
+                    </div>
+                </div>
         </div>';
         return $html;
     }

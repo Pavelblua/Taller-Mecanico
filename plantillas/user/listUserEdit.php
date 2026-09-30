@@ -6,6 +6,6 @@ $new = new forms();
 
 $js = '<script src="js/user/listUser.js"></script>';
 
-$title ='Lista de Usuarios';
+$title ='Lista de Usuarios para Editar';
 
-echo $new->listUser($title)."<br>".$js;
+echo $new->listUserEdit($title)."<br>".$js;

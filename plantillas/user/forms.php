@@ -257,13 +257,13 @@ class forms
         return $html;
     }
 
-    public function listUser(){
+    public function listUser($title){
         $html = '<div class="card p-4 ">
         <div class="mb-4 text-success fw-bold row g-4">
             <div class="col-md-8">
                 <h2 class="mb-1">
                     <i class="bi bi-people-fill fs-2"></i>
-                      Lista de Usuarios
+                      '.$title.'
                 </h2>
             </div>
             <div class="col-md-4">
@@ -290,6 +290,73 @@ class forms
         return $html;
     }
 
+        public function listUserEdit($title){
+        $html = '<div class="card p-4 ">
+        <div class="mb-4 text-success fw-bold row g-4">
+            <div class="col-md-8">
+                <h2 class="mb-1">
+                    <i class="bi bi-people-fill fs-2"></i>
+                      '.$title.'
+                </h2>
+            </div>
+            <div class="col-md-4">
+            
+            <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1"><i class="bi bi-binoculars-fill"></i></span>
+                <input type="text"
+                   class="form-control"
+                   id="search"
+                   name="search"
+                   maxlength="100"
+                   placeholder="Ingrese nombre, apellido o documento" 
+                   aria-describedby="basic-addon1"
+                   onkeyup="searchUserEdit(this.value)">
+                </div>
+            
+            </div>
+        </div>        
+        <div class="table-responsive" id="table">
+            
+        </div>
+        </div>';
+
+        return $html;
+    }
+
+        public function listUserDelete($title){
+        $html = '<div class="card p-4 ">
+        <div class="mb-4 text-success fw-bold row g-4">
+            <div class="col-md-8">
+                <h2 class="mb-1">
+                    <i class="bi bi-people-fill fs-2"></i>
+                      '.$title.'
+                </h2>
+            </div>
+            <div class="col-md-4">
+            
+            <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1"><i class="bi bi-binoculars-fill"></i></span>
+                <input type="text"
+                   class="form-control"
+                   id="search"
+                   name="search"
+                   maxlength="100"
+                   placeholder="Ingrese nombre, apellido o documento" 
+                   aria-describedby="basic-addon1"
+                   onkeyup="searchUserDelete(this.value)">
+                </div>
+            
+            </div>
+        </div>        
+        <div class="table-responsive" id="table">
+            
+        </div>
+        </div>';
+
+        return $html;
+    }
+
+
 public function detailUser(UserEntity $user, $image){
         $combo = new comboCont();
 
@@ -301,14 +368,14 @@ public function detailUser(UserEntity $user, $image){
                         <div class="row g-3">
 
                             <div class="col-md-4">
-                                <label for="id_tipo_doc" class="form-label">
+                                <label for="tipo_doc" class="form-label">
                                     <i class="bi bi-postcard"></i>
                                      Tipo de documento
                                 </label>
 
-                                <input type="text" class="form-control" disabled
-                                        id="id_tipo_doc"
-                                        name="id_tipo_doc"
+                                <input type="text" class="form-control" readonly
+                                        id="tipo_doc"
+                                        name="tipo_doc"
                                         value="'.$user->getTipo_doc().'">
                             </div>
 
@@ -320,7 +387,7 @@ public function detailUser(UserEntity $user, $image){
                                 </label>
 
                                 <input type="text"
-                                       class="form-control" disabled
+                                       class="form-control" readonly
                                        id="nro_doc"
                                        name="nro_doc"
                                        maxlength="20"
@@ -334,7 +401,7 @@ public function detailUser(UserEntity $user, $image){
                                 </label>
 
                                 <input type="text"
-                                       class="form-control" disabled
+                                       class="form-control" readonly
                                        id="nombres"
                                        name="nombres"
                                        maxlength="100"
@@ -349,7 +416,7 @@ public function detailUser(UserEntity $user, $image){
                                 </label>
 
                                 <input type="text"
-                                       class="form-control" disabled
+                                       class="form-control" readonly
                                        id="apellidos"
                                        name="apellidos"
                                        maxlength="100"
@@ -364,7 +431,7 @@ public function detailUser(UserEntity $user, $image){
                                 </label>
 
                                 <input type="email"
-                                       class="form-control" disabled
+                                       class="form-control" readonly
                                        id="correo"
                                        name="correo"
                                        maxlength="100"
@@ -378,7 +445,7 @@ public function detailUser(UserEntity $user, $image){
                                     Celular
                                 </label>
 
-                                <input type="text" disabled
+                                <input type="text" readonly
                                        class="form-control"
                                        id="celular"
                                        name="celular"
@@ -394,7 +461,7 @@ public function detailUser(UserEntity $user, $image){
                                 </label>
 
                                 <input type="text"
-                                       class="form-control" disabled
+                                       class="form-control" readonly
                                        id="direccion"
                                        name="direccion"
                                        maxlength="200"
@@ -409,7 +476,7 @@ public function detailUser(UserEntity $user, $image){
                                 </label>
 
                                 <input type="text"
-                                       class="form-control" disabled
+                                       class="form-control" readonly
                                        id="referencia"
                                        name="referencia"
                                        maxlength="200" value="'.$user->getReferencia().'">
@@ -422,7 +489,7 @@ public function detailUser(UserEntity $user, $image){
                                     Departamento
                                 </label>
 
-                                <input type="text" class="form-control" disabled
+                                <input type="text" class="form-control" readonly
                                         id="id_dep"
                                         name="id_dep"
                                         value="'.$user->getDepartamento().'">
@@ -435,7 +502,7 @@ public function detailUser(UserEntity $user, $image){
                                     Provincia
                                 </label>
 
-                                <input type="text" class="form-control" disabled
+                                <input type="text" class="form-control" readonly
                                         id="id_prov"
                                         name="id_prov"
                                         value="'.$user->getProvincia().'">
@@ -448,7 +515,7 @@ public function detailUser(UserEntity $user, $image){
                                     Distrito
                                 </label>
 
-                                <input class="form-control" type="text" disabled
+                                <input class="form-control" type="text" readonly
                                         id="id_dist"
                                         name="id_dist"
                                         value="'.$user->getDistrito().'">
@@ -475,6 +542,225 @@ public function detailUser(UserEntity $user, $image){
                         </div>
                     </div>
                 </div>
+        </div>';
+        return $html;
+    }
+
+    public function detailUserEdit(UserEntity $user, $image){
+        $combo = new comboCont();
+
+        $html ='<div class="card p-4 ">
+            <form id="frmUsuario" method="POST" action="#">
+
+                <div class="row g-4 text-success fw-bold">
+                    <div class="col-md-9">
+
+                        <div class="row g-3">
+
+                            <div class="col-md-4">
+                                <label for="id_tipo_doc" class="form-label">
+                                    <i class="bi bi-postcard"></i>
+                                     Tipo de documento
+                                </label>
+
+                                <input type="text" class="form-control"
+                                        id="id_tipo_doc"
+                                        name="id_tipo_doc"
+                                        readonly value="'.$user->getTipo_doc().'">
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <label for="nro_doc" class="form-label">
+                                    <i class="bi bi-postcard"></i>
+                                    Nro. documento
+                                </label>
+
+                                <input type="text" readonly
+                                       class="form-control"
+                                       id="nro_doc"
+                                       name="nro_doc"
+                                       maxlength="20"
+                                       required value="'.$user->getNro_doc().'">
+                                       
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="nombres" class="form-label">
+                                    <i class="bi bi-person-vcard-fill"></i>
+                                    Nombres
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       id="nombres"
+                                       name="nombres"
+                                       maxlength="100"
+                                       required value="'.$user->getNombres().'">
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <label for="apellidos" class="form-label">
+                                    <i class="bi bi-person-vcard-fill"></i>
+                                    Apellidos
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       id="apellidos"
+                                       name="apellidos"
+                                       maxlength="100"
+                                       required value="'.$user->getApellidos().'">
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <label for="correo" class="form-label">
+                                    <i class="bi bi-envelope-at-fill"></i>
+                                    Correo
+                                </label>
+
+                                <input type="email"
+                                       class="form-control"
+                                       id="correo"
+                                       name="correo"
+                                       maxlength="100"
+                                       required value="'.$user->getCorreo().'">
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <label for="celular" class="form-label">
+                                    <i class="bi bi-phone-vibrate-fill"></i>
+                                    Celular
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       id="celular"
+                                       name="celular"
+                                       maxlength="20"
+                                       required value="'.$user->getCelular().'">
+                            </div>
+
+
+                            <div class="col-md-12">
+                                <label for="direccion" class="form-label">
+                                    <i class="bi bi-geo-alt-fill"></i>
+                                    Dirección
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       id="direccion"
+                                       name="direccion"
+                                       maxlength="200"
+                                       required value="'.$user->getDireccion().'">
+                            </div>
+
+
+                            <div class="col-md-12">
+                                <label for="referencia" class="form-label">
+                                    <i class="bi bi-compass-fill"></i>
+                                    Referencia
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       id="referencia"
+                                       name="referencia"
+                                       maxlength="200" value="'.$user->getReferencia().'">
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <label for="id_dep" class="form-label">
+                                    <i class="bi bi-geo-fill"></i>
+                                    Departamento
+                                </label>
+
+                                <select class="form-select"
+                                        id="id_dep"
+                                        name="id_dep"
+                                        required onchange="cargaProvincia(this.value)">
+
+                                    '.$combo->cboDepartamento($user->getDepartamento()).'
+
+                                </select>
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <label for="id_prov" class="form-label">
+                                    <i class="bi bi-geo-fill"></i>
+                                    Provincia
+                                </label>
+
+                                <select class="form-select"
+                                        id="id_prov"
+                                        name="id_prov"
+                                        required onchange="cargaDistrito(this.value)">
+
+                                    '.$combo->cboProvincia($user->getId_dep(), $user->getProvincia()).'
+                                </select>
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <label for="id_dist" class="form-label">
+                                    <i class="bi bi-geo-fill"></i>
+                                    Distrito
+                                </label>
+
+                                <select class="form-select"
+                                        id="id_dist"
+                                        name="id_dist"
+                                        required>
+
+                                    '.$combo->cboDistrito($user->getId_dep(), $user->getId_prov(), $user->getDistrito()).'
+
+                                </select>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <div class="d-flex flex-column h-100">
+                            <label for="imagen_usuario"
+                                   id="previewImagen"
+                                   class="border rounded d-flex align-items-center justify-content-center flex-grow-1 overflow-hidden"
+                                   >
+
+                                   <div id="mensajeImagen"
+                                     class="text-center text-muted">
+                                </div>
+
+                                <img id="imagenPreview"
+                                     src="'.$image.'"
+                                     alt="Vista previa"
+                                     class="img-fluid"
+                                     style="width: 100%; height: 100%; object-fit: contain;">
+
+                            </label>
+
+                            <input type="file"
+                                   id="imagen_usuario"
+                                   name="imagen_usuario"
+                                   accept="image/jpeg,image/png,image/webp"
+                                   class="d-none">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-4">
+
+                    
+                </div>
+            </form>
         </div>';
         return $html;
     }

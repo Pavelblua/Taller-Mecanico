@@ -123,6 +123,28 @@ class userService
             $resp->sendEntity($status);
         }
     }
+    
+    public function updateUserFront(UserEntity $user){
+     $status = new statusEntity();
+     $rep = new userRep();
+    
+    try{
+            $status = new statusEntity();
+            $rep = new userRep();
+            $rep->updateUser($user);
+            $status->setStatus(1)
+                ->setMessage('El usuario fue actualizado')
+                ->setMessage_code(201);
+        }catch(\Exception $e){
+            $status = new statusEntity();
+            $status->setStatus(0)
+                ->setMessage('Error al actualizar el usuario')
+                ->setMessage_code(500)
+                ->setError_message($e->getMessage())
+                ->setError_code($e->getCode());
+        }
+        return $status;
+    }
 
     public function listUser($search = null)
     {

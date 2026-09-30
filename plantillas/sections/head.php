@@ -44,8 +44,8 @@ class head
 
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="#" onclick="newUser()">Nuevo Usuario</a></li>
-                            <li><a class="dropdown-item" href="#">Editar Usuario</a></li>
-                            <li><a class="dropdown-item" href="#">Baja de Usuario</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="listUserEdit()">Editar Usuario</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="listUserDelete()">Baja de Usuario</a></li>
                             <li><a class="dropdown-item" href="#" onclick="listUser()">Lista de Usuarios Cliente</a></li>
                         </ul>
                     </li>

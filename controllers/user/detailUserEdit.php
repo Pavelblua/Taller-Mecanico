@@ -30,9 +30,14 @@ if($statusImage!=""){
     $patch=$root[0][2].$statusImage;
 }
 
+$buttonOK='<button type="button" class="btn btn-success" onclick="UpdateUser()">
+          <i class="bi bi-floppy2-fill"></i>
+          Guardar Cambios
+          </button>';
+
 $detailEntity->setTitle('Detalle de Usuario');
-$detailEntity->setBody($form->detailUser($user, $patch));
+$detailEntity->setBody($form->detailUserEdit($user, $patch));
 $detailEntity->setColortitle('bg-success-subtle text-success-emphasis');
-$detailEntity->setIconTitle('bi-person-vcard');
-$detailEntity->setButtons('');
+$detailEntity->setIconTitle('bi-person-fill-gear');
+$detailEntity->setButtons($buttonOK);
 echo $modal->detail($detailEntity);

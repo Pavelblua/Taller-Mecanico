@@ -92,4 +92,91 @@ class ubigeoRep
 
         return $ubigeo;
     }
+
+    public function getNameDepartamento(ubigeoEntity $ubigeo): ubigeoEntity
+    {
+        $conn = new conection();
+        $conect = $conn->connectDatabase();
+
+        $id = $ubigeo->getId_dep();
+        
+        $query = "CALL ubigeo_depDet(?)";
+        $stmt = $conect->prepare($query);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        
+        if ($row) {
+            $ubigeo->setDepartamento($row['nombre']);
+        }
+        
+        $stmt->close();
+        $conect->close();
+        
+        return $ubigeo;
+    }
+
+    public function getNameProvincia(ubigeoEntity $ubigeo):ubigeoEntity
+    {
+        $conn = new conection();
+        $conect = $conn->connectDatabase();
+
+        $id_dep = $ubigeo->getId_dep();
+        $Id_prov = $ubigeo->getId_prov();
+        
+        $query = "CALL ubigeo_provDet(?, ?)";
+        $stmt = $conect->prepare($query);
+        $stmt->bind_param("ii", $id_dep, $id_prov);
+        $stmt->execute();
+        
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        
+        if ($row) {
+            $ubigeo->setProvincia($row['nombre']);
+        }
+        
+        $stmt->close();
+        $conect->close();
+        
+        return $ubigeo;
+    }
+
+    public function getNameDistrito(ubigeoEntity $ubigeo): ubigeoEntity
+    {
+         $conn = new conection();
+        $conect = $conn->connectDatabase();
+
+        $id_dep = $ubigeo->getId_dep();
+        $id_prov = $ubigeo->getId_prov();
+        $id_dist = $ubigeo->getId_dist();
+        
+        $query = "CALL ubigeo_distDet(?, ?, ?)";
+        $stmt = $conect->prepare($query);
+        $stmt->bind_param("iii", $id_dep, $id_prov, $id_dist);
+        $stmt->execute();
+        
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        
+        if ($row) {
+            $ubigeo->setDistrito($row['nombre']);
+        }
+        
+        $stmt->close();
+        $conect->close();
+        
+         return $ubigeo;
+    }
+
+    public function getTotalnameUbigeo(ubigeoEntity $ubigeo): ubigeoEntity
+    {
+        $ubigeo = $this->getNameDepartamento($ubigeo);
+        $ubigeo = $this->getNameProvincia($ubigeo);
+        $ubigeo = $this->getNameDistrito($ubigeo);
+
+        return $ubigeo;
+    }
 }

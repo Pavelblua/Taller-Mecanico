@@ -29,10 +29,13 @@ $patch="";
 if($statusImage!=""){
     $patch=$root[0][2].$statusImage;
 }
-
+$buttonDelete='<button type="button" class="btn btn-danger" onclick="deleteUser()">
+          <i class="bi bi-trash3"></i>
+          Dar de Baja
+          </button>';
 $detailEntity->setTitle('Detalle de Usuario');
 $detailEntity->setBody($form->detailUser($user, $patch));
 $detailEntity->setColortitle('bg-success-subtle text-success-emphasis');
 $detailEntity->setIconTitle('bi-person-vcard');
-$detailEntity->setButtons('');
+$detailEntity->setButtons($buttonDelete);
 echo $modal->detail($detailEntity);

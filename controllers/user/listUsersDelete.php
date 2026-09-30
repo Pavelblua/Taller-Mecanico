@@ -26,7 +26,7 @@ foreach ($dto as $user) {
         $value->celular,
         $value->direccion,
         $value->estado,
-        '<button class="btn btn-outline-primary btn-sm" onclick="detailUser('."'" . $value->tipo_doc."'".',' . $value->nro_doc . ')"><i class="bi bi-person-vcard-fill fs-5"></i></button>'
+        '<button class="btn btn-outline-danger btn-sm" onclick="detailUserDelete('."'" . $value->tipo_doc."'".',' . $value->nro_doc . ')"><i class="bi bi-person-x fs-5"></i></button>'
     ];
 }
 

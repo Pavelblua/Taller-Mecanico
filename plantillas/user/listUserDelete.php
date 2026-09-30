@@ -6,6 +6,6 @@ $new = new forms();
 
 $js = '<script src="js/user/listUser.js"></script>';
 
-$title ='Lista de Usuarios';
+$title ='Lista de Usuarios Activos';
 
-echo $new->listUser($title)."<br>".$js;
+echo $new->listUserDelete($title)."<br>".$js;

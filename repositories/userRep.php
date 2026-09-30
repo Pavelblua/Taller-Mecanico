@@ -103,6 +103,8 @@ class userRep
 
     public function updateUser(UserEntity $user)
     {
+        $estadoUpdate=null;
+
         try {
             $conn = new conection();
             $conect = $conn->connectDatabase();
@@ -140,37 +142,21 @@ class userRep
             $stmt->execute();
             $result = $stmt->get_result();
             
-            $exito = 0;
-            $mensaje = 'Error desconocido al actualizar';
+            $estadoUpdate="Error Desconocido";
             
             if ($result && $row = $result->fetch_assoc()) {
-                $exito = $row['exito'];
-                $mensaje = $row['mensaje'];
+                $estadoUpdate= $row['mensaje'];
             }
             
             $stmt->close();
             $conect->close();
             
-            $status = new statusEntity();
-            $status->setStatus($exito)
-                ->setMessage($mensaje)
-                ->setMessage_code($exito == 1 ? 200 : 400);
-
-            $resp = new responses();
-            $resp->sendEntity($status);
-            exit;
+            
         } catch (\Exception $e) {
-            $status = new statusEntity();
-            $status->setStatus(0)
-                ->setMessage('Error al actualizar el usuario')
-                ->setMessage_code(500)
-                ->setError_message($e->getMessage())
-                ->setError_code($e->getCode());
-
-            $resp = new responses();
-            $resp->sendEntity($status);
-            exit;
+            $estadoUpdate = "Error codigo: ".$e->getCode()." Mensaje: ".$e->getMessage();
         }
+
+        return $estadoUpdate;
     }
     
     public function listUser($search = null)

@@ -3,7 +3,6 @@
 namespace repositories;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/tallerWeb/autoload.php';
 use security\conn\conection;
-use models\entity\UserEntity;
 
 class aditionalsRep
 {

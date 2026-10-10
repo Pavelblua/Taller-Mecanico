@@ -25,3 +25,12 @@ function newUser(){
     var div = "#contenidodinamico";
     ejectAjax(url, data, div);
  }
+
+  function listUserRols(){
+    var url = "./plantillas/user/listUserRols.php";
+    var data = "";
+    var div = "#contenidodinamico";
+    ejectAjax(url, data, div);
+ }
+
+ 

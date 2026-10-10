@@ -30,4 +30,28 @@ class aditionalsRep
         return $idDocument;
     }
 
+    public function getNameTypeDocument($Iddocument)
+    {
+        $conn = new conection();
+        $conect = $conn->connectDatabase();
+        $Document = null;
+
+        $query = "CALL Name_tipo_doc(?)";
+        $stmt = $conect->prepare($query);
+        $stmt->bind_param("s", $Iddocument);
+        $stmt->execute();
+        
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        
+        if ($row) {
+            $Document = $row['abreviatura'];
+        }
+        
+        $stmt->close();
+        $conect->close();
+
+        return $Document;
+    }
+
 }

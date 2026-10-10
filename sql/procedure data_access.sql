@@ -9,7 +9,8 @@ BEGIN
         usu.nombres,
         usu.correo,
         usu.celular,
-        tr.nombre AS rol
+        tr.nombre AS rol,
+        tr.id_rol
     FROM tb_usuarios usu
     INNER JOIN tb_accesos_sistema acc
         ON usu.id_usuario = acc.id_usuario

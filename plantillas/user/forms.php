@@ -5,6 +5,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/tallerWeb/autoload.php';
 
 use controllers\comboCont;
 use models\entity\UserEntity;
+use models\entity\UserRolsEntity;
 class forms
 {
     public function newUser(){
@@ -344,6 +345,39 @@ class forms
                    placeholder="Ingrese nombre, apellido o documento" 
                    aria-describedby="basic-addon1"
                    onkeyup="searchUserDelete(this.value)">
+                </div>
+            
+            </div>
+        </div>        
+        <div class="table-responsive" id="table">
+            
+        </div>
+        </div>';
+
+        return $html;
+    }
+
+    public function listUserRols($title){
+        $html = '<div class="card p-4 ">
+        <div class="mb-4 text-success fw-bold row g-4">
+            <div class="col-md-8">
+                <h2 class="mb-1">
+                    <i class="bi bi-people-fill fs-2"></i>
+                      '.$title.'
+                </h2>
+            </div>
+            <div class="col-md-4">
+            
+            <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon1"><i class="bi bi-binoculars-fill"></i></span>
+                <input type="text"
+                   class="form-control"
+                   id="search"
+                   name="search"
+                   maxlength="100"
+                   placeholder="Ingrese nombre, apellido o documento" 
+                   aria-describedby="basic-addon1"
+                   onkeyup="searchUserRols(this.value)">
                 </div>
             
             </div>
@@ -761,6 +795,171 @@ public function detailUser(UserEntity $user, $image){
                     
                 </div>
             </form>
+        </div>';
+        return $html;
+    }
+
+    public function detailUserRols(UserRolsEntity $user, $image,$userName){
+        $combo = new comboCont();
+        $stateUserName = $userName=="" ? "" : "readonly";
+
+        $html ='<div class="card p-4 ">
+
+                <div class="row g-4 text-success fw-bold">
+                    <div class="col-md-9">
+
+                        <div class="row g-3">
+
+                            <div class="col-md-4">
+                                <label for="tipo_doc" class="form-label">
+                                    <i class="bi bi-postcard"></i>
+                                     Tipo de documento
+                                </label>
+
+                                <input type="text" class="form-control" readonly
+                                        id="tipo_doc"
+                                        name="tipo_doc"
+                                        value="'.$user->getTipoDoc().'">
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <label for="nro_doc" class="form-label">
+                                    <i class="bi bi-postcard"></i>
+                                    Nro. documento
+                                </label>
+
+                                <input type="text"
+                                       class="form-control" readonly
+                                       id="nro_doc"
+                                       name="nro_doc"
+                                       maxlength="20"
+                                       value="'.$user->getNroDoc().'">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="usuario" class="form-label">
+                                    <i class="<i bi bi-person-fill-lock"></i>
+                                    Usuario
+                                </label>
+
+                                <input type="text"
+                                       class="form-control" '
+                                       .$stateUserName.
+                                       '
+                                       id="usuario"
+                                       name="usuario"
+                                       value="'.$userName.'">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="nombres" class="form-label">
+                                    <i class="bi bi-person-vcard-fill"></i>
+                                    Nombres
+                                </label>
+
+                                <input type="text"
+                                       class="form-control" readonly
+                                       id="nombres"
+                                       name="nombres"
+                                       maxlength="100"
+                                       value="'.$user->getNombres().'">
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <label for="apellidos" class="form-label">
+                                    <i class="bi bi-person-vcard-fill"></i>
+                                    Apellidos
+                                </label>
+
+                                <input type="text"
+                                       class="form-control" readonly
+                                       id="apellidos"
+                                       name="apellidos"
+                                       maxlength="100"
+                                       value="'.$user->getApellidos().'">
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <label for="correo" class="form-label">
+                                    <i class="bi bi-envelope-at-fill"></i>
+                                    Correo
+                                </label>
+
+                                <input type="email"
+                                       class="form-control" readonly
+                                       id="correo"
+                                       name="correo"
+                                       maxlength="100"
+                                       value="'.$user->getCorreo().'">
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <label for="celular" class="form-label">
+                                    <i class="bi bi-phone-vibrate-fill"></i>
+                                    Celular
+                                </label>
+
+                                <input type="text" readonly
+                                       class="form-control"
+                                       id="celular"
+                                       name="celular"
+                                       maxlength="20"
+                                       value="'.$user->getCelular().'">
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="rol" class="form-label">
+                                    <i class="bi bi-menu-up"></i>
+                                     Roles
+                                </label>
+
+                                <select class="form-select"
+                                        id="rol"
+                                        name="rol"
+                                        required>
+
+                                    '.$combo->cboRoles($user->getId_rol()).'
+
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="password" class="form-label">
+                                    <i class="bi bi-key-fill"></i>
+                                    Password
+                                </label>
+
+                                <input type="text"
+                                       class="form-control"
+                                       id="password"
+                                       name="password">
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3">
+
+                        <div class="d-flex flex-column h-100">
+                            <label for="imagen_usuario"
+                                   id="previewImagen"
+                                   class="border rounded d-flex align-items-center justify-content-center flex-grow-1 overflow-hidden"
+                                   >
+                                <img id="imagenPreview"
+                                     src="'.$image.'"
+                                     alt="Vista previa"
+                                     class="img-fluid"
+                                     style="width: 100%; height: 100%; object-fit: contain;">
+
+                            </label>
+                        </div>
+                    </div>
+                </div>
         </div>';
         return $html;
     }

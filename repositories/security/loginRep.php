@@ -66,6 +66,7 @@ class loginRep
             $ses->setCorreo($row['correo']);
             $ses->setCelular($row['celular']);
             $ses->setRol($row['rol']);
+            $ses->setId_rol($row['id_rol']);
 
         }
         

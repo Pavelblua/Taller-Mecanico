@@ -101,4 +101,25 @@ class combosRep
 
         return $tipoDocumentos;
     }
+
+    public function listaRoles()
+    {
+        $conn = new conection();
+        $conect = $conn->connectDatabase();
+        $query = "select id_rol, nombre from tb_roles where id_estado =1";
+        $result = $conect->execute_query($query);
+        $roles = [];
+
+        while ($row = $result->fetch_assoc()) {
+            $rol = new comboEntity();
+            $rol->setId($row['id_rol'])
+                ->setNombre($row['nombre']);
+            $roles[] = $rol;
+        }
+
+        $result->free();
+        $conect->close();
+
+        return $roles;
+    }
 }

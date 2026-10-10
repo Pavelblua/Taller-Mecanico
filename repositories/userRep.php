@@ -4,8 +4,7 @@ namespace repositories;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/tallerWeb/autoload.php';
 use security\conn\conection;
 use models\entity\UserEntity;
-use models\entity\statusEntity;
-use transformers\responses;
+use models\entity\userRolsEntity;
 
 class userRep
 {
@@ -183,6 +182,118 @@ class userRep
         $conect->close();
         
         return $users;
+    }
+
+     public function detailUserRols(userRolsEntity $user):userRolsEntity
+    {
+         $conn = new conection();
+        $conect = $conn->connectDatabase();
+
+        $id_tipo_doc = $user->getIdTipoDoc();
+        $nro_doc = $user->getNroDoc();
+        
+        $query = "CALL userRolsDetail(?, ?)";
+        $stmt = $conect->prepare($query);
+        $stmt->bind_param("ss", $id_tipo_doc, $nro_doc);
+        $stmt->execute();
+        
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        
+        if ($row) {
+            $user->setidTipoDoc($row['id_tipo_doc']);
+            $user->setNroDoc($row['nro_doc']);
+            $user->setIdUsuario($row['id_usuario']);
+            $user->setUsuarioLogin($row['usuario_login']);
+            $user->setNombres($row['nombres']);
+            $user->setApellidos($row['apellidos']);
+            $user->setCelular($row['celular']);
+            $user->setCorreo($row['correo']);
+            $user->setId_rol($row['id_rol']);
+
+        }
+        
+        $stmt->close();
+        $conect->close();
+
+        return $user;
+    }
+
+    public function searchUserName($userName)
+    {
+         $conn = new conection();
+        $conect = $conn->connectDatabase();
+
+        $query = "CALL searchUser(?)";
+        $stmt = $conect->prepare($query);
+        $stmt->bind_param("s", $userName);
+        $stmt->execute();
+        
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $data = [];
+        if ($row) {
+            $data[0] =$row['id_usuario'];
+            $data[1] =$row['usuario_login'];
+
+        }
+        
+        $stmt->close();
+        $conect->close();
+
+        return $data;
+    }
+
+    public function createUserRol(userRolsEntity $user): array
+    {
+        $conect = null;
+        $stmt = null;
+
+        try {
+            $conn = new conection();
+            $conect = $conn->connectDatabase();
+            $idUsuario = $user->getIdUsuario();
+            $usuarioLogin = $user->getUsuarioLogin();
+            $password = $user->getPassword();
+            $idRol = $user->getId_rol();
+
+            $query = "CALL InsertUpdateUserRol(?, ?, ?, ?)";
+            $stmt = $conect->prepare($query);
+            if (!$stmt) {
+                throw new \RuntimeException($conect->error);
+            }
+
+            if (!$stmt->bind_param(
+                "issi",
+                $idUsuario,
+                $usuarioLogin,
+                $password,
+                $idRol
+            )) {
+                throw new \RuntimeException($stmt->error);
+            }
+
+            if (!$stmt->execute()) {
+                throw new \RuntimeException($stmt->error);
+            }
+
+            return [
+                'success' => true,
+                'message' => 'Ejecucion exitosa'
+            ];
+        } catch (\Throwable $exception) {
+            return [
+                'success' => false,
+                'message' => "Error codigo: " . $exception->getCode() . " Mensaje: " . $exception->getMessage()
+            ];
+        } finally {
+            if ($stmt) {
+                $stmt->close();
+            }
+            if ($conect) {
+                $conect->close();
+            }
+        }
     }
     
 }

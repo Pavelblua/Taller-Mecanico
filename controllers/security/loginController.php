@@ -64,6 +64,7 @@ class loginController
                 $ses->setHash($log->getToken());
                 $ses->setUsuario($log->getUsuario_login());
                 $ses->setAutenticado(true);
+                $ses->setId_usuario($log->getId_usuario());
                 $tools->createSession($ses);
             }
             $res->sendResponse(200, [

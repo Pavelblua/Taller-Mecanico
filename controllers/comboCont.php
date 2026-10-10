@@ -78,4 +78,22 @@ class comboCont
 
         return $options;
     }
+
+    public function cboRoles($idrol){
+        $comboRep = new combosRep();
+        $roles = $comboRep->listaRoles();
+        $options= '<option value="">Seleccione el Rol</option>';
+
+        for ($i = 0; $i < count($roles); $i++) {
+            $id = $roles[$i]->getId();
+            $nombre = htmlspecialchars((string) $roles[$i]->getNombre(), ENT_QUOTES, 'UTF-8');
+            if($idrol == $id){
+                $options .= '<option value="' . $id . '" selected>' . $nombre . '</option>';
+            } else {
+                $options .= '<option value="' . $id . '">' . $nombre . '</option>';
+            }
+        }
+
+        return $options;
+    }
 }

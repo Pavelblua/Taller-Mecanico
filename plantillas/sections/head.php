@@ -1,7 +1,16 @@
 <?php
 
 namespace plantillas\sections;
+require_once $_SERVER['DOCUMENT_ROOT'] . '/tallerWeb/autoload.php';
+use menu\getMenu;
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION["token"]) && empty($_SESSION["token"])){
+    echo "<script> window.location.reload();</script>";
+}
 class head
 {
     private function headLogo()
@@ -22,6 +31,11 @@ class head
     }
 
     private function headMenu(){
+        $menu = new getMenu();
+        $menuUser ='<div class="collapse navbar-collapse" id="menu">';
+        $menuUser .=$menu->generateMenu($_SESSION["idrol"]);
+        $menuUser .='</div>';
+
         $html = '<!-- MENU -->
     <div class="collapse navbar-collapse" id="menu">
         <ul class="navbar-nav ms-auto">
@@ -106,8 +120,8 @@ class head
 
         </ul>
     </div>';
-
-    return $html;
+//return $html;
+    return $menuUser;
     }
 
     public function headConstructor(){

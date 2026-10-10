@@ -25,6 +25,15 @@ function searchUserDelete(search) {
   }
 }
 
+function searchUserRols(search) {
+  if (search.length > 3) {
+    var url = "./controllers/user/listUsersRols.php";
+    var data = "search=" + search;
+    var div = "#table";
+    ejectAjax(url, data, div);
+  }
+}
+
 function detailUser(tipo_doc, num_doc) {
   var url = "./controllers/user/detailUser.php";
   var data = "tipo_doc=" + tipo_doc + "&num_doc=" + num_doc;
@@ -60,6 +69,23 @@ function deleteUser() {
   var num_doc = $("#nro_doc").val();
   var data = "tipo_doc=" + tipo_doc + "&num_doc=" + num_doc;
   var url = "./controllers/user/deleteUser.php";
+  var div = "#modalstatus";
+  ejectAjax(url, data, div);
+}
+
+function detailUserRols(tipo_doc, num_doc) {
+  var url = "./controllers/user/detailUserRols.php";
+  var data = "tipo_doc=" + tipo_doc + "&num_doc=" + num_doc;
+  var div = "#result";
+  ejectAjax(url, data, div);
+}
+
+function CreateUpdateUserRols(id) {
+   var usuario = $('#usuario').val();
+   var password = $('#password').val();
+   var id_rol = $('#rol').val();
+  var data = "id="+id+"&usuario="+usuario+"&password="+password+"&id_rol="+id_rol;
+  var url = "./controllers/user/InsertUpdateUserRol.php";
   var div = "#modalstatus";
   ejectAjax(url, data, div);
 }

@@ -28,12 +28,12 @@ $user->setNro_doc($_POST['nro_doc']);
 
 $user = $rep->detailUser($user);
 
-$user->setNombres($_POST['nombres']);
-$user->setApellidos($_POST['apellidos']);
-$user->setCorreo($_POST['correo']);
+$user->setNombres(strtoupper($_POST['nombres']));
+$user->setApellidos(strtoupper($_POST['apellidos']));
+$user->setCorreo(strtolower($_POST['correo']));
 $user->setCelular($_POST['celular']);
-$user->setDireccion($_POST['direccion']);
-$user->setReferencia($_POST['referencia']);
+$user->setDireccion(strtoupper($_POST['direccion']));
+$user->setReferencia(strtoupper($_POST['referencia']));
 $user->setId_dep($_POST['id_dep']);
 $user->setId_prov($_POST['id_prov']);
 $user->setId_dist($_POST['id_dist']);
@@ -51,13 +51,12 @@ $user->setProvincia($ubi->getProvincia());
 $user->setDistrito($ubi->getDistrito());
 
 
-// // $image = $_FILES['imagen_usuario'];
-// // $statusImg="";
-
-// // if (isset($image)) {
-// //     $rootImage = $config->rootImageUser();
-// //     $statusImg = $toolsIm->changeFile($image, $rootImage[0][0], $user->getNro_doc(), $rootImage[0][1]);
-// // }
+$image = $_FILES['imagen_usuario'];
+$statusImg="";
+if (isset($image)) {
+     $rootImage = $config->rootImageUser();
+     $statusImg = $toolsIm->changeFile($image, $rootImage[0][0], $user->getNro_doc(), $rootImage[0][1]);
+}
 
 $status = $serv->updateUserFront($user);
 

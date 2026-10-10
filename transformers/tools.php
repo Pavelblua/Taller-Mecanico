@@ -4,6 +4,8 @@ namespace transformers;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/tallerWeb/autoload.php';
 use models\entity\sessionUser;
+use repositories\userRep;
+use security\configuration\config;
 class tools
 {
     public function uploadFile(string $fileName, array $file, string $folder): array
@@ -66,17 +68,20 @@ class tools
         }
 
         // Crear variables de sesión
+        $_SESSION['idusuario'] = $su->getId_usuario();
         $_SESSION['usuario'] = $su->getUsuario();
         $_SESSION['token'] = $su->getHash();
         $_SESSION['nombres'] = $su->getNombres();
         $_SESSION['correo'] = $su->getCorreo();
         $_SESSION['celular'] = $su->getCelular();
+        $_SESSION['idrol'] = $su->getId_rol();
 
         // Opcional: identificar que el usuario está autenticado
         $_SESSION['autenticado'] = $su->getAutenticado();
 
         return true;
     }
+
 
     function changeFile($archivo, $ruta, $nombre, $tipo)
     {
@@ -125,6 +130,14 @@ class tools
                 return [false, "Error: la extensión '.$extension' no es válida para el tipo '$tipo'. Extensiones válidas para '$tipo': " . implode(', ', $extensionesPermitidas) . "."];
             }
 
+            $nombre = trim((string) $nombre);
+            if ($nombre === '') {
+                return [false, "Error: el parámetro 'nombre' está vacío o no es válido."];
+            }
+            if ($nombre !== basename($nombre) || strpos($nombre, '..') !== false) {
+                return [false, "Error: el parámetro 'nombre' contiene caracteres de ruta no permitidos."];
+            }
+
             $ruta = rtrim($ruta, '/\\');
             if (!is_dir($ruta)) {
                 if (!mkdir($ruta, 0755, true)) {
@@ -136,26 +149,72 @@ class tools
                 return [false, "Error: el directorio '$ruta' no tiene permisos de escritura para el proceso PHP."];
             }
 
-            if (empty(trim($nombre))) {
-                return [false, "Error: el parámetro 'nombre' está vacío o no es válido."];
-            }
-
             $rutaCompleta = $ruta . DIRECTORY_SEPARATOR . $nombre . '.' . $extension;
 
-            if (file_exists($rutaCompleta)) {
-                return [false, "Error: ya existe un archivo en '$rutaCompleta'. Elija otro nombre o elimine el archivo existente."];
+            $todasLasExtensiones = array_unique(array_merge(...array_values($extensionesPorTipo)));
+
+            $anteriores = [];
+            $items = scandir($ruta);
+            if ($items === false) {
+                return [false, "Error: no se pudo leer el contenido del directorio '$ruta'."];
+            }
+            foreach ($items as $item) {
+                if ($item === '.' || $item === '..') {
+                    continue;
+                }
+                $rutaItem = $ruta . DIRECTORY_SEPARATOR . $item;
+                if (!is_file($rutaItem)) {
+                    continue;
+                }
+                $info = pathinfo($item);
+                if (!isset($info['extension'])) {
+                    continue;
+                }
+                if ($info['filename'] === $nombre && in_array(strtolower($info['extension']), $todasLasExtensiones, true)) {
+                    $anteriores[] = $rutaItem;
+                }
             }
 
-            if (!move_uploaded_file($archivo['tmp_name'], $rutaCompleta)) {
+            foreach ($anteriores as $anterior) {
+                if (!is_writable($anterior)) {
+                    return [false, "Error: el archivo existente '$anterior' no se puede reemplazar (permisos)."];
+                }
+            }
+
+            $rutaTemporal = $ruta . DIRECTORY_SEPARATOR . '.upload_' . uniqid('', true) . '.tmp';
+
+            if (!move_uploaded_file($archivo['tmp_name'], $rutaTemporal)) {
                 $errorInfo = error_get_last();
                 $detalleError = $errorInfo['message'] ?? 'motivo desconocido';
-                return [false, "Error al mover el archivo hacia '$rutaCompleta'. Detalle: $detalleError"];
+                return [false, "Error al mover el archivo hacia '$ruta'. Detalle: $detalleError"];
             }
 
-            return [true, "Archivo guardado con éxito"];
+            if (!rename($rutaTemporal, $rutaCompleta)) {
+                $errorInfo = error_get_last();
+                $detalleError = $errorInfo['message'] ?? 'motivo desconocido';
+                @unlink($rutaTemporal); // el archivo anterior queda intacto
+                return [false, "Error al guardar el archivo en '$rutaCompleta'. Detalle: $detalleError"];
+            }
+
+            $reemplazado = false;
+            $noEliminados = [];
+            foreach ($anteriores as $anterior) {
+                $reemplazado = true;
+                if ($anterior === $rutaCompleta) {
+                    continue;
+                }
+                if (!@unlink($anterior)) {
+                    $noEliminados[] = basename($anterior);
+                }
+            }
+
+            if (!empty($noEliminados)) {
+                return [true, "Archivo guardado, pero no se pudieron eliminar las versiones anteriores: " . implode(', ', $noEliminados)];
+            }
+
+            return [true, $reemplazado ? "Archivo reemplazado con éxito" : "Archivo guardado con éxito"];
 
         } catch (\Throwable $e) {
-
             return [false, "Error inesperado: " . $e->getMessage() . " (archivo: " . $e->getFile() . ", línea: " . $e->getLine() . ")"];
         }
     }
@@ -175,18 +234,110 @@ class tools
             if ($archivo === '.' || $archivo === '..') {
                 continue;
             }
-       $nombreSinExtension = pathinfo($archivo, PATHINFO_FILENAME);
-            
+            $nombreSinExtension = pathinfo($archivo, PATHINFO_FILENAME);
+
             if (strcasecmp($nombreSinExtension, $fileName) === 0) {
-                
+
                 $existe = $archivo;
-            } 
+            }
 
         }
 
-        if ($existe==""){
-            $existe="userDefault.png";
+        if ($existe == "") {
+            $existe = "userDefault.png";
         }
         return $existe;
+    }
+
+    private function validateUserName($userName)
+    {
+        $rep = new userRep();
+        $user = $rep->searchUserName($userName);
+        $state = false;
+        if (!empty($user)) {
+            $state = true;
+        }
+        return $state;
+    }
+
+    public function userName(string $nombres, string $apellidos): ?string {
+        $nombres = strtolower($nombres);
+        $apellidos = strtolower($apellidos);
+        
+        $config = new config();
+        $particulas = array_map('strtolower', $config->getParticulas());
+
+        $separar = static function (string $texto): array {
+            return preg_split('/\s+/', trim($texto), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        };
+
+        $unirCompuestos = static function (array $partes) use ($particulas): array {
+            $resultado = [];
+
+            for ($i = 0, $total = count($partes); $i < $total; $i++) {
+                $compuesto = $partes[$i];
+
+                while (
+                    in_array(strtolower($partes[$i]), $particulas, true)
+                    && isset($partes[$i + 1])
+                ) {
+                    $compuesto .= $partes[++$i];
+                }
+
+                $resultado[] = $compuesto;
+            }
+
+            return $resultado;
+        };
+
+        $nombresPartes = $unirCompuestos($separar($nombres));
+        $apellidosPartes = $unirCompuestos($separar($apellidos));
+
+        // Primero prueba nombre + apellido.
+        foreach ($nombresPartes as $nombre) {
+            foreach ($apellidosPartes as $apellido) {
+                $usuario = $nombre . $apellido;
+
+                if (!$this->validateUserName($usuario)) {
+                    return $usuario;
+                }
+            }
+        }
+
+        // Primero prueba nombre +'.'+ apellido.
+        foreach ($nombresPartes as $nombre) {
+            foreach ($apellidosPartes as $apellido) {
+                $usuario = $nombre .'.'. $apellido;
+
+                if (!$this->validateUserName($usuario)) {
+                    return $usuario;
+                }
+            }
+        }
+
+        // Si todas están ocupadas, prueba apellido + nombre.
+        foreach ($apellidosPartes as $apellido) {
+            foreach ($nombresPartes as $nombre) {
+                $usuario = $apellido . $nombre;
+
+                if (!$this->validateUserName($usuario)) {
+                    return $usuario;
+                }
+            }
+        }
+
+        // Si todas están ocupadas, prueba apellido + '.' + nombre.
+        foreach ($apellidosPartes as $apellido) {
+            foreach ($nombresPartes as $nombre) {
+                $usuario = $apellido .'.'. $nombre;
+
+                if (!$this->validateUserName($usuario)) {
+                    return $usuario;
+                }
+            }
+        }
+
+        // No hay combinaciones disponibles.
+        return null;
     }
 }

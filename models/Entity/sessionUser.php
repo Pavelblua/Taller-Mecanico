@@ -4,13 +4,26 @@ namespace models\entity;
 
 class sessionUser
 {
+    private $id_usuario;
     private $usuario;
     private $hash;
     private $nombres;
     private $correo;
     private $celular;
     private $rol;
+    private $id_rol;
     private $autenticado;
+
+    public function getId_usuario()
+    {
+        return $this->id_usuario;
+    }
+
+    public function setId_usuario($id_usuario)
+    {
+        $this->id_usuario = $id_usuario;
+        return $this;
+    }
 
     public function getUsuario()
     {
@@ -75,6 +88,17 @@ class sessionUser
     public function setRol($rol)
     {
         $this->rol = $rol;
+        return $this;
+    }
+
+    public function getId_rol()
+    {
+        return $this->id_rol;
+    }
+
+    public function setId_rol($id_rol)
+    {
+        $this->id_rol = $id_rol;
         return $this;
     }
 

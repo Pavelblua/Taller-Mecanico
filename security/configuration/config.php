@@ -31,4 +31,25 @@ class config
         $root[] = ['../../imageUser/', 'imagen', './imageUser/'];
         return $root;
     }
+
+    public function generatePasswordHash(string $password): string
+    {
+        if ($password === '') {
+            throw new \InvalidArgumentException('La contraseña no puede estar vacía');
+        }
+
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+        if ($hash === false) {
+            throw new \RuntimeException('No se pudo generar el hash de la contraseña');
+        }
+
+        return $hash;
+    }
+
+    public function getParticulas(){
+        $particulas = ['del', 'de', 'la', 'las', 'los'];
+        return $particulas;
+    }
+
+    
 }
